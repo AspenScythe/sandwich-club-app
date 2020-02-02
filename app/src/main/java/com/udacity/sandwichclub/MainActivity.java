@@ -8,6 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.udacity.sandwichclub.model.Sandwich;
+import com.udacity.sandwichclub.utils.JsonUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -15,9 +18,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] sandwiches = getResources().getStringArray(R.array.sandwich_names);
+        String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
+        Sandwich[] yummySandwiches = JsonUtils.makeSandwichesFromJsonString(sandwiches);
+
+        String[] sandwichNames = new String[sandwiches.length];
+        for (int n=0; n < sandwiches.length; n++) {
+            sandwichNames[n] = yummySandwiches[n].getMainName();
+        }
+
+        // TODO: Figure out what simple_list_item_1 is supposed to be
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, sandwiches);
+                android.R.layout.simple_list_item_1, sandwichNames);
 
         // Simplification: Using a ListView instead of a RecyclerView
         ListView listView = findViewById(R.id.sandwiches_listview);
