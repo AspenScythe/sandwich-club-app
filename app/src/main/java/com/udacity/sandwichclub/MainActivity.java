@@ -26,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
             sandwichNames[n] = yummySandwiches[n].getMainName();
         }
 
-        // TODO: Figure out what simple_list_item_1 is supposed to be
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, sandwichNames);
+                R.layout.simple_list, sandwichNames);
 
         // Simplification: Using a ListView instead of a RecyclerView
         ListView listView = findViewById(R.id.sandwiches_listview);
