@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -11,6 +12,8 @@ import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
 import org.json.JSONException;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -57,6 +60,42 @@ public class DetailActivity extends AppCompatActivity {
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
+
+        TextView originTv = findViewById(R.id.origin_tv);
+        String oLoc = sandwich.getPlaceOfOrigin();
+        if (oLoc.isEmpty()) {
+            originTv.setText(R.string.unknown_origin);
+        } else {
+            originTv.setText(oLoc);
+        }
+
+        TextView descriptionTv = findViewById(R.id.description_tv);
+        descriptionTv.setText(sandwich.getDescription());
+
+        TextView akaTv = findViewById(R.id.also_known_tv);
+        List<String> akaList = sandwich.getAlsoKnownAs();
+        if (!akaList.isEmpty()) {
+            for (int i = 0; i < akaList.size(); i++) {
+                akaTv.append(akaList.get(i));
+                if (i < akaList.size() - 1) {
+                    akaTv.append(", ");
+                }
+            }
+        } else {
+            akaTv.setText(R.string.no_alternate_names);
+        }
+
+
+        TextView ingredientsTv = findViewById(R.id.ingredients_tv);
+        List<String> ingredientsList = sandwich.getIngredients();
+        for(int i=0; i < ingredientsList.size(); i++) {
+            ingredientsTv.append(ingredientsList.get(i));
+            if (i < ingredientsList.size() - 1) {
+                ingredientsTv.append(", ");
+            }
+        }
+
+
     }
 
     private void closeOnError() {

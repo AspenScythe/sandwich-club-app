@@ -2,10 +2,12 @@ package com.udacity.sandwichclub.utils;
 
 import com.udacity.sandwichclub.model.Sandwich;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsonUtils {
     /**
@@ -45,18 +47,30 @@ public class JsonUtils {
             throws JSONException {
         JSONObject tempSandObject = new JSONObject(sandwich);
         JSONObject sandNameObject = tempSandObject.getJSONObject("name");
-        String sMainName = sandNameObject.getString("mainName");
+        String sMainName = sandNameObject.optString("mainName",
+                "R.string.unknown_value");
 
         // Can't we all just play nicely and be arrays instead of JSON arrays?
-        String[] sAlsoKnownAs =  sandNameObject.getJSONArray("alsoKnownAs")
-                .join(",").split(",");
-        String sPlaceOfOrigin = tempSandObject.getString("placeOfOrigin");
-        String sDescription = tempSandObject.getString("description");
-        String sImage = tempSandObject.getString("image");
-        String[] sIngredients = tempSandObject.getJSONArray("ingredients")
-                .join(",").split(",");
+        JSONArray jAlsoKnownAs = sandNameObject.getJSONArray("alsoKnownAs");
+        List<String> sAlsoKnownAs = new ArrayList<>();
+        for(int i=0; i < jAlsoKnownAs.length(); i++) {
+            sAlsoKnownAs.add(jAlsoKnownAs.getString(i));
+        }
 
-        return new Sandwich(sMainName, Arrays.asList(sAlsoKnownAs), sPlaceOfOrigin,
-                sDescription, sImage, Arrays.asList(sIngredients));
+        String sPlaceOfOrigin = tempSandObject.optString("placeOfOrigin",
+                "R.string.unknown_value");
+        String sDescription = tempSandObject.optString("description",
+                "R.string.unknown_value");
+        String sImage = tempSandObject.optString("image",
+                "R.string.unknown_value");
+
+        JSONArray jIngredients = tempSandObject.getJSONArray("ingredients");
+        List<String> sIngredients = new ArrayList<>();
+        for(int i=0; i < jIngredients.length(); i++) {
+            sIngredients.add(jIngredients.getString(i));
+        }
+
+        return new Sandwich(sMainName, sAlsoKnownAs, sPlaceOfOrigin,
+                sDescription, sImage, sIngredients);
     }
 }
